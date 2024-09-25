@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outil de Dessin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* Styles supplémentaires pour la page de dessin */
+        #canvas-container {
+            position: relative;
+            border: 1px solid #000;
+            margin: 20px 0;
+        }
+        canvas {
+            display: block;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Outil de Dessin</h1>
+    </header>
+    <main>
+        <div id="canvas-container">
+            <canvas id="drawingCanvas"></canvas>
+        </div>
+        <div>
+            <label for="lineWidth">Épaisseur du trait :</label>
+            <input type="range" id="lineWidth" min="1" max="10" value="5">
+        </div>
+        <div>
+            <label for="eraserWidth">Épaisseur de la gomme :</label>
+            <input type="range" id="eraserWidth" min="1" max="50" value="10">
+        </div>
+        <button id="resetButton">Réinitialiser</button>
+        <button id="saveButton">Enregistrer</button>
+        <button id="eraserButton">Gomme</button>
+        <button id="drawButton">Dessiner</button>
+    </main>
+    <footer>
+        <p>&copy; 2024 Mon Projet Personnel</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/drawing.js') }}"></script>
+</body>
+</html>

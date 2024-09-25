@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconnaissance de Chiffres Manuscrits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Projet de Reconnaissance de Chiffres Manuscrits</h1>
+    </header>
+    <main>
+        <section class="intro">
+            <p>Bienvenue sur mon projet personnel de reconnaissance de chiffres manuscrits. Ce projet utilise différents modèles d'apprentissage automatique pour identifier les chiffres dessinés à la main. Sélectionnez un modèle ci-dessous pour commencer.</p>
+        </section>
+        <section class="model-selection">
+            <label for="model">Sélectionnez un modèle :</label>
+            <select id="model">
+                <option value="">--Choisissez un modèle--</option>
+                <option value="model1">resnet</option>
+            </select>
+            <button id="startDrawingButton" class="button">Commencer le dessin</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Mon Projet Personnel</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
