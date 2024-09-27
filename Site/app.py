@@ -34,6 +34,26 @@ def reset_test_images_folder():
 def index():
     return render_template('index.html')
 
+# @app.route('/')
+# def index():
+#     Ask = True
+#     while Ask:
+#         response = requests.get(WEBSITE_API_URL + '/wich_model')
+#         if response.status_code == 200:
+#             model_name = response.text
+#             if model_name:
+#                 Ask = False
+#         else:
+#             Ask = True
+
+
+#     return render_template('load_model.html', model_name=model_name)
+
+# @app.route('/wich_model', methods=['GET'])
+# def wich_mode
+
+
+
 @app.route('/drawing')
 def drawing():
     # subprocess.run(["python", "api_model.py"])
@@ -91,7 +111,7 @@ def predict_image():
     }
     print('r')
     response = requests.post(f'{API_MODEL_URL}/Predictresnet', headers=headers, json = payload)
-    print('a')
+
     print(response)
     return response.json()
 

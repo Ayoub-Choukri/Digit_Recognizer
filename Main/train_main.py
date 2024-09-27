@@ -89,6 +89,12 @@ transform = v2.Compose([
 
 augmented_data = create_dataset_augmented(train_data, transform, nb_augmented=3)
 
+# Concatenate Augmented Data with Non-Augmented Data
+train_data_augmented = train_data + augmented_data
+
+# Create DataLoader for Augmented Data
+train_loader_augmented = DataLoader(train_data_augmented, batch_size=64, shuffle=True)
+
 train_loader_augmented = DataLoader(augmented_data, batch_size=64, shuffle=True)
 
 

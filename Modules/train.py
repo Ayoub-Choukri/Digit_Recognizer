@@ -43,17 +43,21 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
     test_losses = []
     train_accuracies = []
     test_accuracies = []
+    Running_Losses = []
+    Running_Accuracies = []
 
-    for epoch in range(num_epochs):
+    EpochBar = tqdm(range(num_epochs), desc="Epochs")
+    for epoch in EpochBar:
 
         model.train()
-        running_loss = 0.0
-        running_corrects = 0
-        running = 0
+
         ProgressBar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}")
+        
+        Train_Loss = 0
+        Train_Accuracy = 0
+
 
         for inputs, labels in ProgressBar : 
-            running += len(inputs)
             inputs, labels = inputs.to(device), labels.to(device)
             optimizer.zero_grad()
             inputs = inputs.float()
@@ -62,18 +66,31 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
 
             loss = criterion(outputs, labels)
             loss.backward()
-            running_corrects += torch.sum(torch.argmax(outputs, 1) == labels).item()
+
 
             optimizer.step()
 
-            running_loss += loss.item() * inputs.size(0)
+            running_loss = loss.item() * inputs.size(0)
+            Running_Losses.append(running_loss)
+            Train_Loss += running_loss * inputs.size(0)
 
-            ProgressBar.set_description(f"Epoch {epoch+1}/{num_epochs}, Train Loss: {loss.item():.4f}, Train Accuracy: {100 * running_corrects / (running):.2f}%")
+
+            running_corrects = torch.sum(torch.argmax(outputs, 1) == labels).item()
+            Running_Accuracies.append(running_corrects/len(inputs))
+
+            Train_Accuracy += running_corrects
 
 
-        epoch_loss = running_loss / len(train_loader.dataset)
-        train_losses.append(epoch_loss)
-        train_accuracies.append(100 * running_corrects / len(train_loader.dataset))
+            
+            ProgressBar.set_description(f"Epoch {epoch+1}/{num_epochs}, Running Train Loss: {loss.item():.4f}, Running Train Accuracy: {100 * running_corrects / len(inputs):.2f}%")
+
+        
+
+
+        Train_Loss = running_loss / len(train_loader.dataset)
+        train_losses.append(Train_Loss)
+        Train_Accuracy = 100 * Train_Accuracy / len(train_loader.dataset)
+        train_accuracies.append(Train_Accuracy)
 
         
 
@@ -103,9 +120,10 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
 
         epoch_test_loss = test_loss / len(test_loader.dataset)
         test_losses.append(epoch_test_loss)
-        test_accuracies.append(100 * correct / total)
+        Test_Accuracy = 100 * correct / total
+        test_accuracies.append(Test_Accuracy)
 
-        print(f"Epoch [{epoch+1}/{num_epochs}], Train Loss: {epoch_loss:.4f}, Train Accuracy: {100 * running_corrects / len(train_loader.dataset):.2f}%, Test Loss: {epoch_test_loss:.4f}, Test Accuracy: {100 * correct / total:.2f}%")
+        print(f"Epoch [{epoch+1}/{num_epochs}], Train Loss: {Train_Loss:.4f}, Train Accuracy: {Train_Accuracy:.2f}%, Test Loss: {epoch_test_loss:.4f}, Test Accuracy: {Test_Accuracy:.2f}%")
 
     return model, train_losses, test_losses, train_accuracies, test_accuracies
 

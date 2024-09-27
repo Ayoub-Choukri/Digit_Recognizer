@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let erasing = false;
     let eraserWidth = 10;
 
+
+    
+
+
     function startDrawing(event) {
         drawing = true;
         draw(event);

@@ -25,10 +25,16 @@ if Module_Path2 not in sys.path:
 from resnet import *
 from preprocessing import *
 from train import *
+import requests
 
+
+
+WEBSITE_API_URL = "http://127.0.0.1:5000"
 
 app = Flask(__name__)
 
+
+Model_Name = None
 Model_Paths = {'resnet' : "../Trained_Models/Mnist_Resnet18.pth"}
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -47,11 +53,29 @@ def Load_Resnet(model_name):
 
 
 
+@app.route('/Specify_Model', methods=['Post'])
+def Specify_Model():
+    global loaded_models
+    global device
 
+    data = request.get_json()
+    print(data)
+    if Model_Name is None:
+        Model_Name = data['model_name']
+        Load_Model_API(Model_Name)
+        return jsonify({'message': f'Model {Model_Name} loaded successfully'}), 200
 
-@app.route('/')
-def index():
-    return Load_Model_API("resnet")
+@app.route('/Change_Model', methods=['Post'])
+def Change_Model():
+    global loaded_models
+    global device
+
+    data = request.get_json()
+
+    Model_Name = data['model_name']
+    Load_Model_API(Model_Name)
+    
+    return jsonify({'message': f'Model {Model_Name} loaded successfully'}), 200
 
 
 @app.route('/Load<model_name>', methods=['GET'])

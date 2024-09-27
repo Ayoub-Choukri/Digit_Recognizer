@@ -1,0 +1,9 @@
+numpy
+flask
+matplotlib
+PILLOW
+requests
+scikit-learn
+torch
+tqdm
+
