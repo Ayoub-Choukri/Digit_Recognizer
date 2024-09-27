@@ -176,3 +176,70 @@ input[type="range"] {
     /* stretch */
     justify-content: center;
 }
+
+
+/* Section pour les probabilités */
+.probability-section {
+    margin-top: 30px;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.probability-section h2 {
+    margin-bottom: 20px;
+    color: #4CAF50;
+}
+
+/* Style pour le tableau des probabilités */
+table {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:hover td {
+    background-color: #f1f1f1;
+}
+
+/* Ajout d'une animation pour les pourcentages */
+td {
+    position: relative;
+}
+
+td::after {
+    content: '%';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #888;
+}
+
+/* Ajustement du tableau pour les petits écrans */
+@media (max-width: 600px) {
+    table, th, td {
+        font-size: 14px;
+    }
+}

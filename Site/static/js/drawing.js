@@ -123,7 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
 
         .then(data => {
+            console.log(data);
             displayMessage2(data.prediction);
+            fillTable(data.probs);
         }
 
         )
@@ -161,14 +163,55 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Fonction pour afficher le message de succès ou d'erreur de l'enregistrement de l'image
     function displayMessage(message, success) {
         messageContainer.textContent = message;
         messageContainer.style.color = success ? 'green' : 'red';
     }
 
+
+    // Fonction pour afficher la prédiction
     function displayMessage2(message) {
         predictionContainer.textContent = message;
         predictionContainer.style.color = 'green' ;
+    }
+
+    // Fonction pour remplit le tableau de probabilités
+
+    function fillTable(probs) {
+        // Assurez-vous que "probabilityRow" est bien présent dans le document
+        var row = document.getElementById("probabilityRow");
+        if (!row) {
+            console.error("La ligne de probabilités (probabilityRow) est introuvable.");
+            return;
+        }
+    
+        // Vérifier que la liste de probabilités contient bien 10 éléments
+        if (probs.length !== 10) {
+            console.error("La liste de probabilités doit contenir 10 éléments.");
+            return;
+        }
+    
+        // Effacer les anciennes cellules
+        row.innerHTML = '';
+    
+        // Log pour vérifier que les données sont reçues
+        console.log("Mise à jour de la ligne avec les probabilités : ", probs);
+    
+        // Parcours des probabilités et création de nouvelles cellules
+        probs.forEach((prob, index) => {
+            // Créer une nouvelle cellule
+            var cell = document.createElement("td");
+            
+            // Remplir la cellule avec la probabilité correspondante en pourcentage (2 décimales)
+            cell.innerHTML = (prob * 100).toFixed(2) + "%";
+    
+            // Ajouter la cellule à la ligne existante
+            row.appendChild(cell);
+        });
+    
+        // Log final pour confirmer que la fonction s'est bien exécutée
+        console.log("Ligne mise à jour avec succès.");
     }
 });
 

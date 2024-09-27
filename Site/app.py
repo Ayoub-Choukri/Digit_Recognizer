@@ -30,6 +30,60 @@ def reset_test_images_folder():
         print(f"Erreur lors de la réinitialisation du dossier Test_Images : {e}")
         return False
 
+
+# Route pour spécifier le modèle à l'api du modèle
+@app.route('/Specify_Model', methods=['POST'])
+def Specify_Model():
+    data = request.get_json()
+    if 'model_name' in data:
+        print('yeaaah')
+        model_name = data['model_name']
+        payload = {
+            'model_name': model_name
+        }
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        # Requête vers l'API modèle
+        response = requests.post(f'{API_MODEL_URL}/Specify_Model', headers=headers, json=payload)
+        
+        # Log de la réponse pour débogage
+        # print("Status Code:", response.status_code)
+        # print("Response Text:", response.text)
+        
+        # Essayer de retourner le JSON seulement si la réponse est valide
+        try:
+            return response.json()  # JSON attendu
+        except ValueError:
+            return jsonify({"error": "Réponse invalide de l'API modèle"}), 500
+    else:
+        return jsonify({'error': 'Nom de modèle manquant'}), 400
+    
+
+
+@app.route('/Change_Model', methods=['Post'])
+def Change_Model():
+    data = request.get_json()
+    if 'model_name' in data:
+        model_name = data['model_name']
+        payload = {
+            'model_name': model_name
+        }
+        headers = {
+            'Content-Type': 'application/json',
+        }
+        response = requests.post(f'{API_MODEL_URL}/Change_Model', headers=headers, json=payload)
+        return response.json()
+    else:
+        return jsonify({'error ': 'Nom de modèle manquant'}), 400
+    
+
+                        
+
+
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -110,9 +164,9 @@ def predict_image():
         'Content-Type': 'application/json',
     }
     print('r')
-    response = requests.post(f'{API_MODEL_URL}/Predictresnet', headers=headers, json = payload)
-
-    print(response)
+    response = requests.post(f'{API_MODEL_URL}/Predict', headers=headers, json = payload)
+    
+    print(response.json())
     return response.json()
 
 

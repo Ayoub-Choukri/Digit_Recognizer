@@ -80,8 +80,7 @@ print("----------------------------------------------------------------------")
 # Data Augmentation
 
 transform = v2.Compose([
-    v2.RandomAffine(degrees=10, translate=(0.005, 0.005)),
-    v2.GaussianBlur(kernel_size=3),
+    v2.RandomAffine(degrees=10, translate=(0.005, 0.05), scale=(0.95, 1.05)),
     v2.RandomRotation(degrees=40),
     v2.ToTensor(),
 ])
