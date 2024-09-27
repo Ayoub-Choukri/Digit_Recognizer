@@ -41,3 +41,5 @@ The repository is structured as follows:
 - The `Trained_Models` folder contains the trained models.
 
 - The `Modules` folder contains the modules that are used in the website and in the training of the models.
+
+- The `Data` folder contains the data that are used in the training of the models.
