@@ -40,16 +40,19 @@ Model_Paths = {'resnet' : "../Trained_Models/Mnist_Resnet18.pth"}
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 loaded_models = {}
-
+model_to_use = None
 
 def Load_Resnet(model_name):
     global Model_Paths
     global device
     global loaded_models
+    global model_to_use
 
     if model_name not in loaded_models:
         loaded_models[model_name] = Load_Model( Model_Paths[model_name] ,device)
         loaded_models[model_name].to(device)
+        model_to_use = loaded_models[model_name]
+        print(f"Model {model_name} loaded successfully")
 
 
 
@@ -57,9 +60,11 @@ def Load_Resnet(model_name):
 def Specify_Model():
     global loaded_models
     global device
+    global Model_Name
+
 
     data = request.get_json()
-    print(data)
+
     if Model_Name is None:
         Model_Name = data['model_name']
         Load_Model_API(Model_Name)
@@ -94,16 +99,17 @@ def Load_Model_API(model_name):
 
 
 
-@app.route('/Predict<model_name>', methods=['POST'])
-def Predict(model_name):
+@app.route('/Predict', methods=['POST'])
+def Predict():
 
     global loaded_models
     global device
+    global model_to_use
 
-    load_response = Load_Model_API(model_name)
 
-    if load_response[1] != 200:
-        assert False, load_response[0]
+    if model_to_use is None:
+        print(f"Model_Name : {Model_Name}")
+        assert False, "No model loaded"
 
     else:
 
@@ -121,17 +127,21 @@ def Predict(model_name):
 
         image = image.unsqueeze(0).to(device)
 
-        loaded_models[model_name].eval()
+        model_to_use.eval()
 
         with torch.no_grad():
 
             image = image.float()
             image = image.to(device)
-            output = loaded_models[model_name](image)
+            output = model_to_use(image)
+            # Apply softmax
+            output = torch.nn.functional.softmax(output, dim=1)
+            # Round to 3 decimal places
+            output =  torch.round(output * 1000) / 1000
 
             _, predicted = torch.max(output, 1)
-
-            return jsonify({'prediction': predicted.item()}), 200
+            output = output[0]
+            return jsonify({'prediction': predicted.item(),'probs': output.tolist()}), 200
         
 if __name__ == '__main__':
 
